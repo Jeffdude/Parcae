@@ -1,9 +1,9 @@
 """
 Main file of my experiment with procudurally generated dangers
 
-Author: Jeff Milling - jeffmilling/gmail/com
+Author: Jeff M -- jeffmilling/gmail/com
 """
-import pygame, random
+import pygame, random, sys
 from pygame.locals import *
 from ProceduralGen import *
 #------------------------------------------------------------------------------
@@ -14,6 +14,7 @@ DISP_DIM = (0,0)
 
 WORLD_DIM = (0,0)
 WORLD = None
+W_SEED = None
 
 # Colors
 WHITE = (255, 255, 255)
@@ -43,13 +44,14 @@ def initWindow(fullscreen=True):
 #------------------------------------------------------------------------------
 # Initialize the world
 #------------------------------------------------------------------------------
-def initWorld(maxMagnitude=100):
+def initWorld(maxMagnitude=100, worldSeed=None):
     """
     Set up the Parcae landscape 
     """
     global WORLD_DIM
     global DISP_DIM
     global WORLD
+    global W_SEED
 
     # Get proper dimensions
     #   defined by the closest numerical values 
@@ -62,8 +64,14 @@ def initWorld(maxMagnitude=100):
         tempHeight <<= 1
     WORLD_DIM = (tempWidth + 1, tempHeight + 1)
 
-    # Create initial landscale
-    WORLD = pcgDiamondSquare(WORLD_DIM[0], WORLD_DIM[1], maxMagnitude)
+    # Create initial landscale from seed value if it is defined
+    if worldSeed is not None:
+        random.seed(worldSeed)
+        WORLD = pcgDiamondSquare(WORLD_DIM[0], WORLD_DIM[1], maxMagnitude,
+                random.getstate())
+    else: # default to system time
+        random.seed()
+        WORLD = pcgDiamondSquare(WORLD_DIM[0], WORLD_DIM[1], maxMagnitude)
 
 #------------------------------------------------------------------------------
 # Initialize Parcae environment and call life loop

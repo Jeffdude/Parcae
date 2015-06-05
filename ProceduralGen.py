@@ -1,7 +1,7 @@
 """
 Central place for procedural generation algorithms
 
-Author: Jeff
+Author: Jeff M -- jeffmilling/gmail/com
 """
 
 import pygame, random
@@ -26,13 +26,20 @@ def debug():
     global DEBUG_BOOL
     return DEBUG_BOOL
 
-def diamondSquare(wDimensions, heightMap, randMagnitude):
+#------------------------------------------------------------------------------
+# Diamond Square Algorithm
+#------------------------------------------------------------------------------
+   
+
+def _diamondSquare(wDimensions, heightMap, randMagnitude, randState=None):
     global NULL_HEIGHT # used to prevent overwritten information
     # define side lengths
     xDim, yDim = wDimensions
     if xDim != yDim:
         raise ValueError("DS Algorithm doesn't know how to handle rectangles yet")
     sideLength = xDim - 1
+    if randState is not None:
+        random.setstate(randState)
 
     # square
     while sideLength >= 2:
@@ -86,10 +93,11 @@ def diamondSquare(wDimensions, heightMap, randMagnitude):
     
     return heightMap
 
-
     
-    
-def pcgDiamondSquare(wWidth, wHeight, maxMagnitude):
+def pcgDiamondSquare(wWidth, wHeight, maxMagnitude, randState=None):
+    """
+    public interface for diamondSquare heightmap generator
+    """
     # ensure / fix dimensions to be in the form of 2^n + 1
     worldWidth, worldHeight = getProperDimensions(wWidth, wHeight)
     if debug():
@@ -110,5 +118,44 @@ def pcgDiamondSquare(wWidth, wHeight, maxMagnitude):
 
     # begin diamond square algorithm
     worldDimensions = (worldWidth, worldHeight)
-    return diamondSquare(worldDimensions, heightMap, maxMagnitude)
+    return _diamondSquare(worldDimensions, heightMap, maxMagnitude,
+            randState)
 
+#------------------------------------------------------------------------------
+# Random Sampling Algorithm
+#------------------------------------------------------------------------------
+
+def isValidPoint(prev_coords, cur_coord, min_distance, 
+        min_distance_sq=(min_distance * min_distance)):
+    for i_coord in prev_coords:
+        if i_coord[0] == cur_coord[0]:
+            return fabs(i_coord[1] - cur_coord[1]) > min_distance
+        else if i_coord[1] == cur_coord[1]:
+            return fabs(i_coord[0] - cur_coord[0]) > min_distance
+        else:
+            xdiff = fabs(i_coord[0] - cur_coord[0])
+            ydiff = fabs(i_coord[1] - cur_coord[1])
+            return (xdiff * xdiff) + (ydiff * ydiff) > min_distance_sq
+    return True
+
+
+def pcgRandomPoints(wDim, numPoints=10, minDistance=50,
+        randState=None):
+    """
+    return list of a random sampling of <numPoints> positions in 
+    a 2d world with dimensions wDim (x,y)
+    """
+    (wWidth, wHeight) = wDim
+    if randState is not None:
+        random.setstate(randState)
+    else:
+        random.seed()
+    min_distance_sq = min_distance * min_distance
+    points = []
+    n = 0
+    while n < numPoints:
+        pt_coord = (random.randint(0, wWidth), random.randint(0, wHieght))
+        if isValidPoint(points, pt_coord, minDistance, min_distance_sq):
+            points.append(pt_coord)
+            n+=1
+    return points
