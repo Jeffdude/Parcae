@@ -27,5 +27,4 @@ def initWindow(fullscreen=True):
 def renderLandscape():
     for x in range(settings.WORLD.len):
         for y in range(settings.WORLD[].len):
-
-
+            #TODO
