@@ -13,6 +13,7 @@ def init()
     WORLD_DIM = (0,0)
     WORLD = None
     W_SEED = None
+    W_MAX_HEIGHT = 0
 
     # Colors
     WHITE = (255, 255, 255)

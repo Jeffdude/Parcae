@@ -36,6 +36,7 @@ def initWorld(maxMagnitude=100, worldSeed=None):
         random.seed()
     settings.WORLD = pcgDiamondSquare(settings.WORLD_DIM[0], settings.WORLD_DIM[1], 
             maxMagnitude, random.getstate())
+    settings.W_MAX_HEIGHT = pcgGetMaxHeight()
 
 #------------------------------------------------------------------------------
 # Initialize Parcae environment and call life loop
