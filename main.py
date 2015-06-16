@@ -50,9 +50,9 @@ def main():
     settings.DISP_DIMENSIONS=(2**n + 1, 2**n + 1)
 
     settings.init()
-    initWindow(False)
+    initWindow()
     initWorld()
-    
+    initRenderLandscape()
     
     
 if __name__ == "__main__":

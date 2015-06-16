@@ -7,6 +7,8 @@ Author: Jeff M -- jeffmilling/gmail/com
 # Global Constants
 #------------------------------------------------------------------------------
 def init()
+    DEBUG = 3
+
     SCREEN = None
     DISP_DIM = (0,0)
 
@@ -20,4 +22,4 @@ def init()
     GREEN = (0, 80, 0)
     RED = (150, 0, 0)
     BLACK = (0, 0, 0)
-
+    
