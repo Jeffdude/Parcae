@@ -9,26 +9,26 @@ if settings.DEBUG > 2:
 # Setting up the window
 #------------------------------------------------------------------------------
 
-def initWindow(fullscreen=True):
+def initWindow(fullscreen=False):
     """ 
     Set up pygame window
-    defaults to fullscreen mode
+    default to windowed mode
     """
     if settings.DEBUG: print("~ Initializing pygame window") 
     pygame.init()
     pygame.display.set_caption('Parcae')
     dispInfo = pygame.display.Info()
-    dispStyle = None
+    if settings.DEBUG > 1:
+        print(">   Display Height: {}".format(dispInfo.current_h))
+        print(">   Display Width: {}".format(dispInfo.current_w))
+    dispStyle = 0
     if(fullscreen):
         if settings.DEBUG: print("~ Pygame window is fullscreen") 
         dispStyle = pygame.FULLSCREEN | pygame.HWSURFACE | pygame.DOUBLEBUF
-        settings.DISP_DIM = (dispInfo.current_h, disp_info.current_w)
-        if settings.DEBUG > 1:
-            print(">   Display Height: {}".format(dispInfo.current_h))
-            print(">   Display Width: {}".format(dispInfo.current_w))
-    SCREEN = pygame.display.set_mode(settings.DISP_DIM, dispStyle)
-    SCREEN.set_alpha(None)
-    SCREEN.fill(BLACK)
+        settings.DISP_DIM = (dispInfo.current_h, dispInfo.current_w)
+    settings.SCREEN = pygame.display.set_mode(settings.DISP_DIM, dispStyle)
+    settings.SCREEN.set_alpha(None)
+    settings.SCREEN.fill(settings.BLACK)
     if settings.DEBUG: print("~ Done initializing pygame window") 
 
 #------------------------------------------------------------------------------
@@ -46,11 +46,11 @@ def initRenderLandscape():
     if settings.DEBUG > 2: 
         renderStart = time.clock()
 
-    for x in range(settings.WORLD.len):
-        for y in range(settings.WORLD[0].len):
+    for x in range(len(settings.WORLD)):
+        for y in range(len(settings.WORLD[0])):
             coord_color = makeColor(settings.WORLD[x][y])
             settings.SCREEN.set_at((x,y), coord_color)
-
+    pygame.display.flip()
     if settings.DEBUG > 2:
         renderStop = time.clock()
         print(">>   Initial Render took {} seconds".format(\
