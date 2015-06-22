@@ -12,10 +12,9 @@ from color import *
 #------------------------------------------------------------------------------
 NULL_HEIGHT = -1
         
-TRACK_MAX = False
-MAX_HEIGHT = 0
+MAX_HEIGHT = 0 # useful for rendering the map
 
-DEBUG_BOOL = False
+DEBUG_BOOL = True
 
 #------------------------------------------------------------------------------
 # Helper Functions
@@ -28,30 +27,22 @@ def getProperDimensions(worldWidth, worldHeight):
         tempWidth <<= 1
     while tempHeight < worldHeight - 1:
         tempHeight <<= 1
+    tempWidth += 1
+    tempHeight += 1
+    if not tempWidth == worldWidth or not tempHeight == worldHeight:
+           print("!! World dimensions adjusted. New dimensions are:\
+           width: {} height: {}".format(tempWidth, tempHeight))
     return (tempWidth + 1, tempHeight + 1)
 
 def debug():
     global DEBUG_BOOL
     return DEBUG_BOOL
 
-
-def trackMax():       # the max height is useful for rendering the map
-    global TRACK_MAX
-    return TRACK_MAX
-
-def pcgGetMaxHeight():   
-    """
-    Small helper function that returns the max height in the last generator
-    function
-     - resets MAX_HEIGHT and TRACK_MAX to 0 and False
-    """
+def getLastMaxHeight(): # WARNING: Definitely not thread safe
     global MAX_HEIGHT
-    global TRACK_MAX
-    if trackMax():
-        TRACK_MAX = False
-        temp = MAX_HEIGHT
-    else:
-        return 0
+    return MAX_HEIGHT
+
+
 #------------------------------------------------------------------------------
 # Diamond Square Algorithm
 #------------------------------------------------------------------------------
@@ -59,8 +50,7 @@ def pcgGetMaxHeight():
 
 def _diamondSquare(wDimensions, heightMap, randMagnitude, randState=None):
     global NULL_HEIGHT # used to prevent overwritten information
-    if trackMax():
-        global MAX_HEIGHT # need global var to track max
+    global MAX_HEIGHT # need global var to track max
 
     # define side lengths
     xDim, yDim = wDimensions
@@ -93,9 +83,8 @@ def _diamondSquare(wDimensions, heightMap, randMagnitude, randState=None):
                 if heightMap[x + centerLength][y + centerLength] == NULL_HEIGHT:
                     if debug():
                         print('center {}'.format(cVal))
-                    if trackMax():
-                        if cVal > MAX_HEIGHT:
-                            MAX_HEIGHT = cVal
+                    if cVal > MAX_HEIGHT:
+                        MAX_HEIGHT = cVal
                     heightMap[x + centerLength][y + centerLength] = cVal
 
         # diamond
@@ -118,9 +107,8 @@ def _diamondSquare(wDimensions, heightMap, randMagnitude, randState=None):
                     if debug():
                         print('edge {}'.format(eVal))
                         print('  writing to: {},{}'.format(x,y))
-                    if trackMax():
-                        if eVal > MAX_HEIGHT:
-                            MAX_HEIGHT = eVal
+                    if eVal > MAX_HEIGHT:
+                        MAX_HEIGHT = eVal
                     heightMap[x][y] = eVal
 
         randMagnitude /= 2
@@ -129,17 +117,12 @@ def _diamondSquare(wDimensions, heightMap, randMagnitude, randState=None):
     return heightMap
 
     
-def pcgDiamondSquare(wWidth, wHeight, maxMagnitude, randState=None,
-        getMaxHeight=False):
+def pcgDiamondSquare(wWidth, wHeight, maxMagnitude, randState=None):
     """
     public interface for diamondSquare heightmap generator
     """
     # ensure / fix dimensions to be in the form of 2^n + 1
     worldWidth, worldHeight = getProperDimensions(wWidth, wHeight)
-    # debug and max height
-    if getMaxHeight:
-        global TRACK_MAX 
-        TRACK_MAX = True
     if debug():
         print('wWidth: {} wHeight: {}'.format(worldWidth, worldHeight))
     # create the map
