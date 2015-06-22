@@ -165,11 +165,11 @@ def pcgDiamondSquare(wWidth, wHeight, maxMagnitude, randState=None,
 #------------------------------------------------------------------------------
 
 def isValidPoint(prev_coords, cur_coord, min_distance, 
-        min_distance_sq=(min_distance * min_distance)):
+        min_distance_sq):
     for i_coord in prev_coords:
         if i_coord[0] == cur_coord[0]:
             return fabs(i_coord[1] - cur_coord[1]) > min_distance
-        else if i_coord[1] == cur_coord[1]:
+        elif i_coord[1] == cur_coord[1]:
             return fabs(i_coord[0] - cur_coord[0]) > min_distance
         else:
             xdiff = fabs(i_coord[0] - cur_coord[0])

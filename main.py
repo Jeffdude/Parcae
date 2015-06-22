@@ -49,7 +49,6 @@ def main():
     n = 5
     settings.DISP_DIMENSIONS=(2**n + 1, 2**n + 1)
 
-    settings.init()
     initWindow()
     initWorld()
     initRenderLandscape()

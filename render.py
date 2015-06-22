@@ -17,7 +17,7 @@ def initWindow(fullscreen=True):
     if settings.DEBUG: print("~ Initializing pygame window") 
     pygame.init()
     pygame.display.set_caption('Parcae')
-    dispInfo = pygame.display.info()
+    dispInfo = pygame.display.Info()
     dispStyle = None
     if(fullscreen):
         if settings.DEBUG: print("~ Pygame window is fullscreen") 
@@ -53,5 +53,6 @@ def initRenderLandscape():
 
     if settings.DEBUG > 2:
         renderStop = time.clock()
-        print(">>   Initial Render took {} seconds".format(
-            round(renderStop - renderStart, 4) )
+        print(">>   Initial Render took {} seconds".format(\
+                round(renderStop - renderStart, 4)))
+
