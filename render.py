@@ -53,16 +53,10 @@ def initRenderLandscape():
 
     if settings.DEBUG > 2:
         renderStop = time.clock()
-<<<<<<< HEAD
-        print(">>   Initial Render took {} seconds".format(
-            round(renderStop - renderStart, 4) ))
+        print(">>   Initial Render took {} seconds".format(\
+                round(renderStop - renderStart, 4)))
 
 #def updateWindow(dirty_rects):
 #    """ dirty_rects is a rectangle or list of rectangles that will be refreshed
 #    on screen
 #    """
-=======
-        print(">>   Initial Render took {} seconds".format(\
-                round(renderStop - renderStart, 4)))
-
->>>>>>> e10cd0c29c04f44c3f7d2135f57b06f3644958ba
