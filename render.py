@@ -17,7 +17,7 @@ def initWindow(fullscreen=True):
     if settings.DEBUG: print("~ Initializing pygame window") 
     pygame.init()
     pygame.display.set_caption('Parcae')
-    dispInfo = pygame.display.info()
+    dispInfo = pygame.display.Info()
     dispStyle = None
     if(fullscreen):
         if settings.DEBUG: print("~ Pygame window is fullscreen") 
@@ -53,6 +53,7 @@ def initRenderLandscape():
 
     if settings.DEBUG > 2:
         renderStop = time.clock()
+<<<<<<< HEAD
         print(">>   Initial Render took {} seconds".format(
             round(renderStop - renderStart, 4) ))
 
@@ -60,3 +61,8 @@ def initRenderLandscape():
 #    """ dirty_rects is a rectangle or list of rectangles that will be refreshed
 #    on screen
 #    """
+=======
+        print(">>   Initial Render took {} seconds".format(\
+                round(renderStop - renderStart, 4)))
+
+>>>>>>> e10cd0c29c04f44c3f7d2135f57b06f3644958ba
