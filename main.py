@@ -4,9 +4,11 @@ Main file of my experiment with procudurally generated dangers
 Author: Jeff M -- jeffmilling/gmail/com
 """
 import pygame, random, sys
-from pygame.locals import *
+import numpy as np
+# from pygame.locals import *
 from render import *
 from ProceduralGen import *
+import noise_maker as pcg
 
 # Defining global constants
 import settings 
@@ -40,9 +42,9 @@ def initWorld(maxMagnitude=100, worldSeed=None):
         random.seed(worldSeed)
     else: # default to system time
         random.seed()
-    settings.WORLD = pcgDiamondSquare(settings.WORLD_DIM[0], settings.WORLD_DIM[1], 
-            maxMagnitude, random.getstate())
-    settings.W_MAX_HEIGHT = getLastMaxHeight()
+    settings.WORLD, settings.W_MAX_HEIGHT = pcg.simplexNoise(
+            settings.WORLD_DIM[0], settings.WORLD_DIM[1]) 
+
     if settings.DEBUG:
         print(">  Terrain max height: {}".format(settings.W_MAX_HEIGHT))
 
@@ -56,7 +58,13 @@ def lifeLoop():
 
     Should handle landscape updates, species life/death, and keyboard input
     """
-    return None
+    while(True):
+        for event in pygame.event.get():
+            if event.type == QUIT:
+                return
+            elif event.type == KEYDOWN:
+                if event.key == K_ESCAPE:   #event is escape key
+                    return
 
 #------------------------------------------------------------------------------
 # Initialize Parcae environment and call life loop
@@ -66,7 +74,7 @@ def main():
     Main function
     """
     # Disable fullscreen, set dimensions
-    n = 4
+    n = 10
     displayEdgeSize = int(2**n + 1)
     if settings.DEBUG:
         print(">   Display Edge Size: {}".format(displayEdgeSize))
@@ -76,7 +84,11 @@ def main():
     initWorld()
     initRenderLandscape()
     
+    settings.W_MAX_HEIGHT = 200
     lifeLoop()
+    print("~ Quitting")
+    pygame.quit()
+    return
     
     
 if __name__ == "__main__":

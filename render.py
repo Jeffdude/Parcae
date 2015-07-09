@@ -5,6 +5,7 @@ import settings # access globals
 from color import * # color helper functions
 if settings.DEBUG > 2:
     import time
+NUM_ERRORS = 0
 #------------------------------------------------------------------------------
 # Setting up the window
 #------------------------------------------------------------------------------
@@ -35,10 +36,13 @@ def initWindow(fullscreen=False):
 # Rendering and helper functions
 #------------------------------------------------------------------------------
 def makeColor(toColorize):
+    global NUM_ERRORS
     if toColorize <= settings.W_MAX_HEIGHT:
         return colorGenRGB(toColorize, 0, settings.W_MAX_HEIGHT)
     else:
-        print("# Color exceeds max colorizable value")
+        if NUM_ERRORS == 0:
+            print("# Color exceeds max colorizable value")
+            NUM_ERRORS += 1
         return (0,0,0)
 
 def initRenderLandscape():
