@@ -1,11 +1,12 @@
 import pygame
 from pygame.locals import *
-from ProceduralGen import *
 import settings # access globals
-from color import * # color helper functions
+import color # color helper functions
+import matplotlib.pyplot as plt
 if settings.DEBUG > 2:
     import time
 NUM_ERRORS = 0
+water_height = 0
 #------------------------------------------------------------------------------
 # Setting up the window
 #------------------------------------------------------------------------------
@@ -37,8 +38,13 @@ def initWindow(fullscreen=False):
 #------------------------------------------------------------------------------
 def makeColor(toColorize):
     global NUM_ERRORS
+    global water_height
     if toColorize <= settings.W_MAX_HEIGHT:
-        return colorGenRGB(toColorize, 0, settings.W_MAX_HEIGHT)
+        if toColorize <= water_height:
+            return (0, 255, 255)
+            #return color.grayscale(abs(water_height - toColorize), 0, water_height)
+        else:
+            return color.colorGenRGB(toColorize, water_height, settings.W_MAX_HEIGHT)
     else:
         if NUM_ERRORS == 0:
             print("# Color exceeds max colorizable value")
@@ -46,10 +52,13 @@ def makeColor(toColorize):
         return (0,0,0)
 
 def initRenderLandscape():
+    global water_height
     if settings.DEBUG: print("~ Beginning initial render") 
     if settings.DEBUG > 2: 
         renderStart = time.clock()
 
+    water_height = settings.W_MAX_HEIGHT * 0.55
+    print("~ Water height set to: {}".format(water_height))
     for x in range(len(settings.WORLD)):
         for y in range(len(settings.WORLD[0])):
             coord_color = makeColor(settings.WORLD[x][y])

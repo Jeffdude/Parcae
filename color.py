@@ -31,3 +31,15 @@ def colorGenRGB(mag, cmin, cmax):
 
        red, green, blue = floatRgb(mag, cmin, cmax)
        return (int(red*255), int(green*255), int(blue*255))
+
+def grayscale(mag, cmin, cmax):
+    """
+    Returns a 3-tuple of integers to be used in terrain generation
+    """
+    if mag > cmax or mag < cmin:
+        return (0, 0, 0)
+    scale = float(cmax - cmin)
+    frac = (mag - cmin) / scale
+    return (frac * 255, frac * 255, frac * 255)
+
+
