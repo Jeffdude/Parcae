@@ -7,7 +7,6 @@ import pygame, random, sys
 import numpy as np
 # from pygame.locals import *
 from render import *
-from ProceduralGen import *
 import noise_maker as pcg
 
 # Defining global constants
@@ -74,7 +73,7 @@ def main():
     Main function
     """
     # Disable fullscreen, set dimensions
-    n = 10
+    n = 9
     displayEdgeSize = int(2**n + 1)
     if settings.DEBUG:
         print(">   Display Edge Size: {}".format(displayEdgeSize))
